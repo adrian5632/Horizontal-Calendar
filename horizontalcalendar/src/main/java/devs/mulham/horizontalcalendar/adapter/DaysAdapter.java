@@ -1,7 +1,5 @@
 package devs.mulham.horizontalcalendar.adapter;
 
-import android.graphics.Color;
-import android.support.v4.content.res.ResourcesCompat;
 import android.text.Spannable;
 import android.text.format.DateFormat;
 import android.util.TypedValue;
@@ -72,13 +70,12 @@ public class DaysAdapter extends HorizontalCalendarBaseAdapter<DateViewHolder, C
 
             if ("%EVENT%".equals(config.getFormatBottomText())) {
                 Spannable eventText = null;
-                int color = Color.TRANSPARENT;
 
                 if (eventsPredicate != null) {
                     List<CalendarEvent> events = eventsPredicate.events(day);
-                    if (!events.isEmpty()) {
-                        CalendarEvent firstEvent = events.get(0);
+                    CalendarEvent firstEvent = (events == null || events.isEmpty()) ? null : events.get(0);
 
+                    if (firstEvent != null && firstEvent.getDescription() != null && !firstEvent.getDescription().isEmpty()) {
                         BadgeDrawable drawable = new BadgeDrawable.Builder()
                                 .type(BadgeDrawable.TYPE_ONLY_ONE_TEXT)
                                 .badgeColor(firstEvent.getColor())
@@ -87,7 +84,6 @@ public class DaysAdapter extends HorizontalCalendarBaseAdapter<DateViewHolder, C
                                 .build();
 
                         eventText = drawable.toSpannable();
-                        color = firstEvent.getColor();
                     }
                 }
                 holder.textBottom.setText(eventText);
