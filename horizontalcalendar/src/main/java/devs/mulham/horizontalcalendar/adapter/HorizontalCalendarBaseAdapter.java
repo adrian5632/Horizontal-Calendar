@@ -34,10 +34,11 @@ public abstract class HorizontalCalendarBaseAdapter<VH extends DateViewHolder, T
     private final HorizontalCalendarPredicate disablePredicate;
     final CalendarEventsPredicate eventsPredicate;
     private final int cellWidth;
+    final boolean eventsAsBadge;
 
     private CalendarItemStyle disabledItemStyle;
 
-    protected HorizontalCalendarBaseAdapter(int itemResId, final HorizontalCalendar horizontalCalendar, HorizontalCalendarPredicate disablePredicate, CalendarEventsPredicate eventsPredicate) {
+    protected HorizontalCalendarBaseAdapter(int itemResId, final HorizontalCalendar horizontalCalendar, HorizontalCalendarPredicate disablePredicate, CalendarEventsPredicate eventsPredicate, boolean eventsAsBadge) {
         this.itemResId = itemResId;
         this.horizontalCalendar = horizontalCalendar;
         this.disablePredicate = disablePredicate;
@@ -45,6 +46,7 @@ public abstract class HorizontalCalendarBaseAdapter<VH extends DateViewHolder, T
             this.disabledItemStyle = disablePredicate.style();
         }
         this.eventsPredicate = eventsPredicate;
+        this.eventsAsBadge = eventsAsBadge;
 
         cellWidth = Utils.calculateCellWidth(horizontalCalendar.getContext(), horizontalCalendar.getNumberOfDatesOnScreen());
     }
@@ -57,7 +59,7 @@ public abstract class HorizontalCalendarBaseAdapter<VH extends DateViewHolder, T
         viewHolder.itemView.setOnClickListener(new MyOnClickListener(viewHolder));
         viewHolder.itemView.setOnLongClickListener(new MyOnLongClickListener(viewHolder));
 
-        if (eventsPredicate != null) {
+        if (eventsPredicate != null && !eventsAsBadge) {
             initEventsRecyclerView(viewHolder.eventsRecyclerView);
         } else {
             viewHolder.eventsRecyclerView.setVisibility(View.GONE);
@@ -86,7 +88,7 @@ public abstract class HorizontalCalendarBaseAdapter<VH extends DateViewHolder, T
     }
 
     protected void showEvents(VH viewHolder, Calendar date) {
-        if (eventsPredicate == null) {
+        if (eventsPredicate == null || eventsAsBadge) {
             return;
         }
 

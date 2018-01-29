@@ -64,7 +64,7 @@ public final class HorizontalCalendar {
     }
 
     /* Init Calendar View */
-    void init(View rootView, final Calendar defaultSelectedDate, HorizontalCalendarPredicate disablePredicate, CalendarEventsPredicate eventsPredicate) {
+    void init(View rootView, final Calendar defaultSelectedDate, HorizontalCalendarPredicate disablePredicate, CalendarEventsPredicate eventsPredicate, boolean eventsAsBadge) {
         calendarView = rootView.findViewById(calendarId);
         calendarView.setHasFixedSize(true);
         calendarView.setHorizontalScrollBarEnabled(false);
@@ -79,7 +79,7 @@ public final class HorizontalCalendar {
             disablePredicate = new HorizontalCalendarPredicate.Or(disablePredicate, defaultDisablePredicate);
         }
 
-        mCalendarAdapter = new DaysAdapter(this, startDate, endDate, disablePredicate, eventsPredicate);
+        mCalendarAdapter = new DaysAdapter(this, startDate, endDate, disablePredicate, eventsPredicate, eventsAsBadge);
         calendarView.setAdapter(mCalendarAdapter);
         calendarView.setLayoutManager(new HorizontalLayoutManager(calendarView.getContext(), false));
         calendarView.addOnScrollListener(new HorizontalCalendarScrollListener());
@@ -389,9 +389,10 @@ public final class HorizontalCalendar {
             CalendarItemStyle defaultStyle = configBuilder.createDefaultStyle();
             CalendarItemStyle selectedItemStyle = configBuilder.createSelectedItemStyle();
             HorizontalCalendarConfig config = configBuilder.createConfig();
+            boolean eventsAsBadge = configBuilder.getEventsAsBadge();
 
             HorizontalCalendar horizontalCalendar = new HorizontalCalendar(this, config, defaultStyle, selectedItemStyle);
-            horizontalCalendar.init(rootView, defaultSelectedDate, disablePredicate, eventsPredicate);
+            horizontalCalendar.init(rootView, defaultSelectedDate, disablePredicate, eventsPredicate, eventsAsBadge);
             return horizontalCalendar;
         }
     }

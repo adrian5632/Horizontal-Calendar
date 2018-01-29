@@ -21,6 +21,7 @@ public class ConfigBuilder {
     private String formatBottomText;
     private boolean showTopText = true;
     private boolean showBottomText = true;
+    private boolean eventsAsBadge = false;
 
     /* Colors and Background*/
     private int colorTextTop, colorTextTopSelected;
@@ -109,6 +110,11 @@ public class ConfigBuilder {
         return this;
     }
 
+    public ConfigBuilder eventsAsBadge(boolean value) {
+        this.eventsAsBadge = value;
+        return this;
+    }
+
     public ConfigBuilder textColor(int textColorNormal, int textColorSelected) {
         colorTextTop = textColorNormal;
         colorTextMiddle = textColorNormal;
@@ -165,6 +171,10 @@ public class ConfigBuilder {
         config.setShowBottomText(showBottomText);
 
         return config;
+    }
+
+    boolean getEventsAsBadge() {
+        return eventsAsBadge;
     }
 
     CalendarItemStyle createDefaultStyle() {

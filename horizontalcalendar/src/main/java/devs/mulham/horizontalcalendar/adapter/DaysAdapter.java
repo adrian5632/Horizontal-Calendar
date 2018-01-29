@@ -31,8 +31,8 @@ public class DaysAdapter extends HorizontalCalendarBaseAdapter<DateViewHolder, C
     private Calendar startDate;
     private int itemsCount;
 
-    public DaysAdapter(HorizontalCalendar horizontalCalendar, Calendar startDate, Calendar endDate, HorizontalCalendarPredicate disablePredicate, CalendarEventsPredicate eventsPredicate) {
-        super(R.layout.hc_item_calendar, horizontalCalendar, disablePredicate, eventsPredicate);
+    public DaysAdapter(HorizontalCalendar horizontalCalendar, Calendar startDate, Calendar endDate, HorizontalCalendarPredicate disablePredicate, CalendarEventsPredicate eventsPredicate, boolean eventsAsBadge) {
+        super(R.layout.hc_item_calendar, horizontalCalendar, disablePredicate, eventsPredicate, eventsAsBadge);
         this.startDate = startDate;
         itemsCount = calculateItemsCount(endDate);
     }
@@ -68,7 +68,7 @@ public class DaysAdapter extends HorizontalCalendarBaseAdapter<DateViewHolder, C
         if (config.isShowBottomText()) {
             holder.textBottom.setTextSize(TypedValue.COMPLEX_UNIT_SP, config.getSizeBottomText());
 
-            if ("%EVENT%".equals(config.getFormatBottomText())) {
+            if (eventsAsBadge) {
                 Spannable eventText = null;
 
                 if (eventsPredicate != null) {
