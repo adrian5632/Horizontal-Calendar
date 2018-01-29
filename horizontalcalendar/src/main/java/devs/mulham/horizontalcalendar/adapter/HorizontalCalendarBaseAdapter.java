@@ -32,7 +32,7 @@ public abstract class HorizontalCalendarBaseAdapter<VH extends DateViewHolder, T
     private final int itemResId;
     final HorizontalCalendar horizontalCalendar;
     private final HorizontalCalendarPredicate disablePredicate;
-    private final CalendarEventsPredicate eventsPredicate;
+    final CalendarEventsPredicate eventsPredicate;
     private final int cellWidth;
 
     private CalendarItemStyle disabledItemStyle;

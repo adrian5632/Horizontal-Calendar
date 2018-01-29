@@ -1,5 +1,7 @@
 package devs.mulham.horizontalcalendar.adapter;
 
+import android.graphics.Color;
+import android.support.v4.content.res.ResourcesCompat;
 import android.text.format.DateFormat;
 import android.util.TypedValue;
 import android.view.View;
@@ -10,6 +12,7 @@ import java.util.List;
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.HorizontalCalendarView;
 import devs.mulham.horizontalcalendar.R;
+import devs.mulham.horizontalcalendar.model.CalendarEvent;
 import devs.mulham.horizontalcalendar.model.HorizontalCalendarConfig;
 import devs.mulham.horizontalcalendar.utils.CalendarEventsPredicate;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarPredicate;
@@ -63,7 +66,23 @@ public class DaysAdapter extends HorizontalCalendarBaseAdapter<DateViewHolder, C
         }
 
         if (config.isShowBottomText()) {
-            holder.textBottom.setText(DateFormat.format(config.getFormatBottomText(), day));
+            if ("%EVENT%".equals(config.getFormatBottomText())) {
+                String eventText = null;
+                int color = Color.TRANSPARENT;
+
+                if (eventsPredicate != null) {
+                    List<CalendarEvent> events = eventsPredicate.events(day);
+                    if (!events.isEmpty()) {
+                        CalendarEvent firstEvent = events.get(0);
+                        eventText = firstEvent.getDescription();
+                        color = firstEvent.getColor();
+                    }
+                }
+                holder.textBottom.setText(eventText);
+                holder.textBottom.setBackgroundColor(color);
+            } else {
+                holder.textBottom.setText(DateFormat.format(config.getFormatBottomText(), day));
+            }
             holder.textBottom.setTextSize(TypedValue.COMPLEX_UNIT_SP, config.getSizeBottomText());
         } else {
             holder.textBottom.setVisibility(View.GONE);
