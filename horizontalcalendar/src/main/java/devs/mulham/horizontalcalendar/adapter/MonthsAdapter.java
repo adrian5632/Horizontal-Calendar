@@ -1,7 +1,5 @@
 package devs.mulham.horizontalcalendar.adapter;
 
-import android.graphics.Color;
-import android.support.v4.content.res.ResourcesCompat;
 import android.text.format.DateFormat;
 import android.util.TypedValue;
 import android.view.View;
@@ -12,7 +10,6 @@ import java.util.List;
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.HorizontalCalendarView;
 import devs.mulham.horizontalcalendar.R;
-import devs.mulham.horizontalcalendar.model.CalendarEvent;
 import devs.mulham.horizontalcalendar.model.HorizontalCalendarConfig;
 import devs.mulham.horizontalcalendar.utils.CalendarEventsPredicate;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarPredicate;
@@ -22,27 +19,29 @@ import devs.mulham.horizontalcalendar.utils.Utils;
  * custom adapter for {@link HorizontalCalendarView HorizontalCalendarView}
  *
  * @author Mulham-Raee
- * @since v1.0.0
+ * @since v1.3.3
  * <p>
  * See {devs.mulham.horizontalcalendar.R.layout#hc_item_calendar} Calendar CustomItem Layout
  */
-public class DaysAdapter extends HorizontalCalendarBaseAdapter<DateViewHolder, Calendar> {
+public class MonthsAdapter extends HorizontalCalendarBaseAdapter<DateViewHolder, Calendar> {
 
-    public DaysAdapter(HorizontalCalendar horizontalCalendar, Calendar startDate, Calendar endDate, HorizontalCalendarPredicate disablePredicate, CalendarEventsPredicate eventsPredicate, boolean eventsAsBadge) {
-        super(R.layout.hc_item_calendar, horizontalCalendar, startDate, endDate, disablePredicate, eventsPredicate, eventsAsBadge);
+    public MonthsAdapter(HorizontalCalendar horizontalCalendar, Calendar startDate, Calendar endDate, HorizontalCalendarPredicate disablePredicate, CalendarEventsPredicate eventsPredicate) {
+        super(R.layout.hc_item_calendar, horizontalCalendar, startDate, endDate, disablePredicate, eventsPredicate);
     }
 
     @Override
     protected DateViewHolder createViewHolder(View itemView, int cellWidth) {
         final DateViewHolder holder = new DateViewHolder(itemView);
+
         holder.layoutContent.setMinimumWidth(cellWidth);
+        //holder.textTop.setVisibility(View.GONE);
 
         return holder;
     }
 
     @Override
     public void onBindViewHolder(DateViewHolder holder, int position) {
-        Calendar day = getItem(position);
+        Calendar month = getItem(position);
         HorizontalCalendarConfig config = horizontalCalendar.getConfig();
 
         final Integer selectorColor = horizontalCalendar.getConfig().getSelectorColor();
@@ -50,41 +49,25 @@ public class DaysAdapter extends HorizontalCalendarBaseAdapter<DateViewHolder, C
             holder.selectionView.setBackgroundColor(selectorColor);
         }
 
-        holder.textMiddle.setText(DateFormat.format(config.getFormatMiddleText(), day));
+        holder.textMiddle.setText(DateFormat.format(config.getFormatMiddleText(), month));
         holder.textMiddle.setTextSize(TypedValue.COMPLEX_UNIT_SP, config.getSizeMiddleText());
 
         if (config.isShowTopText()) {
-            holder.textTop.setText(DateFormat.format(config.getFormatTopText(), day));
+            holder.textTop.setText(DateFormat.format(config.getFormatTopText(), month));
             holder.textTop.setTextSize(TypedValue.COMPLEX_UNIT_SP, config.getSizeTopText());
         } else {
             holder.textTop.setVisibility(View.GONE);
         }
 
         if (config.isShowBottomText()) {
-            if ("%EVENT%".equals(config.getFormatBottomText())) {
-                String eventText = null;
-                int color = Color.TRANSPARENT;
-
-                if (eventsPredicate != null) {
-                    List<CalendarEvent> events = eventsPredicate.events(day);
-                    if (!events.isEmpty()) {
-                        CalendarEvent firstEvent = events.get(0);
-                        eventText = firstEvent.getDescription();
-                        color = firstEvent.getColor();
-                    }
-                }
-                holder.textBottom.setText(eventText);
-                holder.textBottom.setBackgroundColor(color);
-            } else {
-                holder.textBottom.setText(DateFormat.format(config.getFormatBottomText(), day));
-            }
+            holder.textBottom.setText(DateFormat.format(config.getFormatBottomText(), month));
             holder.textBottom.setTextSize(TypedValue.COMPLEX_UNIT_SP, config.getSizeBottomText());
         } else {
             holder.textBottom.setVisibility(View.GONE);
         }
 
-        showEvents(holder, day);
-        applyStyle(holder, day, position);
+        showEvents(holder, month);
+        applyStyle(holder, month, position);
 
     }
 
@@ -105,17 +88,18 @@ public class DaysAdapter extends HorizontalCalendarBaseAdapter<DateViewHolder, C
             throw new IndexOutOfBoundsException();
         }
 
-        int daysDiff = position - horizontalCalendar.getShiftCells();
+        int monthsDiff = position - horizontalCalendar.getShiftCells();
 
         Calendar calendar = (Calendar) startDate.clone();
-        calendar.add(Calendar.DATE, daysDiff);
+        calendar.add(Calendar.MONTH, monthsDiff);
 
         return calendar;
     }
 
     @Override
     protected int calculateItemsCount(Calendar startDate, Calendar endDate) {
-        int days = Utils.daysBetween(startDate, endDate) + 1;
+        int days = Utils.monthsBetween(startDate, endDate) + 1;
         return days + (horizontalCalendar.getShiftCells() * 2);
     }
+
 }
