@@ -296,7 +296,7 @@ public final class HorizontalCalendar {
             if (Utils.isSameDate(date, startDate)) {
                 position = 0;
             } else {
-                position = Utils.daysBetween(startDate, date);
+                position = Utils.daysBetween(startDate, date) + 1;
             }
         } else {
             if (Utils.isSameMonth(date, startDate)) {
