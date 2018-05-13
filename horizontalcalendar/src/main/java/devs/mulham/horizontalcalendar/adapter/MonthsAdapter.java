@@ -25,8 +25,8 @@ import devs.mulham.horizontalcalendar.utils.Utils;
  */
 public class MonthsAdapter extends HorizontalCalendarBaseAdapter<DateViewHolder, Calendar> {
 
-    public MonthsAdapter(HorizontalCalendar horizontalCalendar, Calendar startDate, Calendar endDate, HorizontalCalendarPredicate disablePredicate, CalendarEventsPredicate eventsPredicate) {
-        super(R.layout.hc_item_calendar, horizontalCalendar, startDate, endDate, disablePredicate, eventsPredicate);
+    public MonthsAdapter(HorizontalCalendar horizontalCalendar, Calendar startDate, Calendar endDate, HorizontalCalendarPredicate disablePredicate, CalendarEventsPredicate eventsPredicate, boolean eventsAsBadge) {
+        super(R.layout.hc_item_calendar, horizontalCalendar, startDate, endDate, disablePredicate, eventsPredicate, eventsAsBadge);
     }
 
     @Override
